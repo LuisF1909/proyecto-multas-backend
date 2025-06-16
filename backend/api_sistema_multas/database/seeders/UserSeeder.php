@@ -1,31 +1,28 @@
 <?php
+// En database/seeders/UserSeeder.php
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\User; // Importa el modelo User
-use App\Models\Department; // Importa el modelo Department
-use Illuminate\Support\Facades\Hash; // Para encriptar contraseñas
+use App\Models\User;
+use App\Models\Department;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Obtener algunos departamentos para asignar usuarios
         $itDepartment = Department::where('name', 'Tecnologías de la Información')->first();
         $financeDepartment = Department::where('name', 'Finanzas')->first();
 
         if ($itDepartment) {
             User::firstOrCreate(
-                ['email' => 'it.user@example.com'], // Condición para buscar
-                [ // Datos para crear si no existe
-                    'name' => 'Usuario IT Principal',
-                    'password' => Hash::make('password'), // ¡Usa contraseñas seguras en producción!
+                ['email' => 'it.user@example.com'],
+                [
+                    'name' => 'Admin User IT',
+                    'password' => Hash::make('password'),
                     'department_id' => $itDepartment->id,
+                    'role' => 'admin', // ASIGNAR ROL DE ADMIN
                 ]
             );
         }
@@ -34,21 +31,12 @@ class UserSeeder extends Seeder
             User::firstOrCreate(
                 ['email' => 'finance.user@example.com'],
                 [
-                    'name' => 'Usuario Finanzas Principal',
+                    'name' => 'Finance User',
                     'password' => Hash::make('password'),
                     'department_id' => $financeDepartment->id,
-                ]
-            );
-            User::firstOrCreate(
-                ['email' => 'another.finance@example.com'],
-                [
-                    'name' => 'Otro Usuario Finanzas',
-                    'password' => Hash::make('password'),
-                    'department_id' => $financeDepartment->id,
+                    'role' => 'user', // ASIGNAR ROL DE USER (o simplemente omitirlo para usar el default)
                 ]
             );
         }
-
-        // Puedes añadir más usuarios aquí si lo deseas
     }
 }

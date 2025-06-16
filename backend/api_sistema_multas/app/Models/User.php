@@ -17,6 +17,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
         'department_id', // Añadir department_id para asignación masiva
     ];
 
